@@ -5,25 +5,31 @@ on:
     types:
       - deploy
   workflow_dispatch:
-  
+
 jobs:
   deploy:
     runs-on: ubuntu-22.04
 
     steps:
       # Шаг 1: Подключение к VPS
-      - name: Execute remote SSH commands using SSH key
-        uses: appleboy/ssh-action@master
+      - name: Install SSH key
+        uses: webfactory/ssh-agent@v0.7.0
         with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.VPS_PRIVATE_KEY }}
-          script: |
-            scp docker-compose.yml ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:/home/${{ secrets.VPS_USERNAME }}/docker-compose.yml
-            docker-compose down
-            docker-compose up -d
+          ssh-private-key: ${{ secrets.VPS_PRIVATE_KEY }}
 
-      # Шаг 2: Отправка статуса
+      # Шаг 2: Копирование docker-compose.yml на VPS
+      - name: Copy docker-compose.yml to VPS
+        run: |
+            scp docker-compose.yml ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:/home/${{ secrets.VPS_USERNAME }}/docker-compose.yml
+
+     # Шаг 3: Подключение к VPS и запуск Docker Compose
+      - name: Deploy Docker Compose on VPS
+        run: |
+            ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} <<EOF
+            docker compose down
+            docker compose up -d
+
+      # Шаг 4: Отправка статуса
       - name: Send success status
         if: success()
         run: echo "Deployment completed successfully."
