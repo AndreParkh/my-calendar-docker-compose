@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  backend:
+    image: ${{ secrets.DOCKER_HUB_USERNAME }}/my-calendar-backend:latest
+    container_name: my-calendar-backend
+    ports:
+      - "5000:5000"
+    restart: always

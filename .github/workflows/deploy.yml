@@ -1,0 +1,32 @@
+name: Deploy
+
+on:
+  repository_dispatch:
+    types:
+      - deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+      # Шаг 1: Подключение к VPS
+      - name: Execute remote SSH commands using SSH key
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_PRIVATE_KEY }}
+          script: |
+            cd /path/to/docker-compose
+            docker-compose down
+            docker-compose up -d
+
+      # Шаг 2: Отправка статуса
+      - name: Send success status
+        if: success()
+        run: echo "Deployment completed successfully."
+
+      - name: Send failure status
+        if: failure()
+        run: echo "Deployment failed."
