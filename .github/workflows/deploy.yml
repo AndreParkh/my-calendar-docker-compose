@@ -25,7 +25,7 @@ jobs:
      # Шаг 3: Подключение к VPS и запуск Docker Compose
       - name: Deploy Docker Compose on VPS
         run: |
-            ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} <<EOF
+            ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} <<EOF
             scp docker-compose.yml ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:/home/${{ secrets.VPS_USERNAME }}/docker-compose.yml
             docker compose down
             docker compose up -d
