@@ -20,7 +20,7 @@ jobs:
      # Шаг 3: Подключение к VPS и запуск Docker Compose
       - name: Deploy Docker Compose on VPS
         run: |
-            cd add/my-calendar-docker-compose
+            cd app/my-calendar-docker-compose
             git pull
             sudo docker compose down || true
             sudo docker compose up
