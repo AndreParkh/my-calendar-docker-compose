@@ -24,7 +24,7 @@ jobs:
             cd /home/${{ secrets.VPS_USERNAME }}/app/my-calendar-docker-compose
             git pull
             sudo docker compose down || true
-            sudo docker compose up
+            sudo docker compose up -d
 
       # Шаг 4: Отправка статуса
       - name: Send success status
