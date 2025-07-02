@@ -1,8 +1,49 @@
-# version: '3.8'
-
 services:
-  backend:
-    image: andreyparkh/my-calendar-backend:latest
-    container_name: my-calendar-backend
-    ports:
-      - "5000:5000"
+    postgres:
+        image: postgres:17
+        container_name: postgres_container
+        environment:
+            POSTGRES_DB: mydb
+            POSTGRES_USER: admin
+            POSTGRES_PASSWORD: password
+        ports:
+            - "5001:5001"
+        volumes:
+            - postgres_data:/var/lib/postgres/data
+
+    backend:
+        image: andreyparkh/my-calendar-backend:latest
+        container_name: my-calendar-backend
+        ports:
+            - "5002:5002"
+        depends_on:
+            - postgres
+        environment:
+            SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/mydb
+            SPRING_DATASOURCE_USERNAME: admin
+            SPRING_DATASOURCE_PASSWORD: password
+
+    frontend:
+        image: my-calendar-frontend:latest
+        container_name: my-calendar-frontend
+        ports:
+            - "5003:80"
+        volumes:
+            - frontend-dist:/app/dist
+
+    nginx:
+        image: nginx:alpine
+        ports:
+            - "80:80"
+        volumes:
+            - ./nginxdefault.conf:/etc/nginx/conf.d/default.conf
+            - frontend-dist:/usr/share/nginx/html
+        depends_on:
+            - frontend
+            - backend
+
+volumes:
+    postgres_data:
+    frontend-dist:
+
+
