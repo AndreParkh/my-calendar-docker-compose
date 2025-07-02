@@ -24,7 +24,7 @@ services:
             SPRING_DATASOURCE_PASSWORD: password
 
     frontend:
-        image: my-calendar-frontend:latest
+        image: andreyparkh/my-calendar-frontend:latest
         container_name: my-calendar-frontend
         ports:
             - "5003:80"
