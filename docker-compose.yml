@@ -1,3 +1,6 @@
+networks:
+    dev:
+
 services:
     postgres:
         image: postgres:17
@@ -10,6 +13,8 @@ services:
             - "5001:5001"
         volumes:
             - postgres_data:/var/lib/postgres/data
+        networks: 
+            - dev
 
     backend:
         image: andreyparkh/my-calendar-backend:latest
@@ -22,14 +27,16 @@ services:
             SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/mydb
             SPRING_DATASOURCE_USERNAME: admin
             SPRING_DATASOURCE_PASSWORD: password
+        networks: 
+            - dev
 
     frontend:
         image: andreyparkh/my-calendar-frontend:latest
         container_name: my-calendar-frontend
         ports:
-            - "5003:80"
-        volumes:
-            - frontend-dist:/app/dist
+            - "5003:5003"
+        networks: 
+            - dev
 
     nginx:
         image: nginx:alpine
@@ -37,13 +44,12 @@ services:
             - "80:80"
         volumes:
             - ./nginxdefault.conf:/etc/nginx/conf.d/default.conf
-            - frontend-dist:/usr/share/nginx/html
         depends_on:
             - frontend
             - backend
+        networks: 
+            - dev
 
 volumes:
     postgres_data:
-    frontend-dist:
-
 
