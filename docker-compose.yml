@@ -43,7 +43,7 @@ services:
         ports:
             - "80:80"
         volumes:
-            - ./nginxdefault.conf:/etc/nginx/conf.d/default.conf
+            - ./nginxdefault.conf:/etc/nginx/nginx.conf
         depends_on:
             - frontend
             - backend
