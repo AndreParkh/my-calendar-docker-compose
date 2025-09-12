@@ -1,0 +1,9 @@
+services:
+
+  frontend:
+    image: andreyparkh/my-calendar-frontend-pr:latest
+    container_name: family-hub-forntend-pr
+    ports:
+      - "5011:5010"
+    env_file:
+      - frontend.env
