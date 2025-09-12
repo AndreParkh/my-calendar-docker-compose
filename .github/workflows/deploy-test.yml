@@ -22,7 +22,7 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_PRIVATE_KEY }}
-          source: docker-compose.test.yml
+          source: ./docker-compose.test.yml
           target: /home/${{ secrets.VPS_USER }}/test/
 
       # Шаг 2: Подключение к VPS
