@@ -15,7 +15,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Шаг 1: Копируем docker-compose на VPS
+      # Шаг 1: Подключение к VPS
+      - name: Install SSH key
+        uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.VPS_PRIVATE_KEY }}
+
+      # Шаг 2: Копируем docker-compose на VPS
       - name: Upload docker-compose.test.yml to VPS
         uses: appleboy/scp-action@v1
         with:
@@ -25,12 +31,6 @@ jobs:
           source: ./docker-compose.test.yml
           target: /home/${{ secrets.VPS_USER }}/test/
 
-      # Шаг 2: Подключение к VPS
-      - name: Install SSH key
-        uses: webfactory/ssh-agent@v0.9.1
-        with:
-          ssh-private-key: ${{ secrets.VPS_PRIVATE_KEY }}
-      
      # Шаг 3: Подключение к VPS и запуск Docker Compose
       - name: Deploy Docker Compose on VPS
         run: |
