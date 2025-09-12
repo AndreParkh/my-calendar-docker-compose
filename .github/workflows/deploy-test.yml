@@ -14,22 +14,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up SSH key
-        run: |
-            mkdir -p ~/.ssh
-            echo ${{ secrets.VPS_PRIVATE_KEY }} > ~/.ssh/id_rsa
-            chmod 600 ~/.ssh/id_rsa
-            ssh-keyscan -H {{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
-      
-      - name: Set up SSH key
-        run: |
-            scp -o StrictHostKeyChecking=no ~/.ssh/id_rsa docker-compose.test.yml ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:/test/
-
       # Шаг 1: Подключение к VPS
       - name: Install SSH key
         uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: ${{ secrets.VPS_PRIVATE_KEY }}
+
+      - name: Add VPS host to known_hosts
+        run: |
+            mkdir -p ~/.ssh
+            ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+      
+      - name: Copy docker-compose.test.yml to VPS
+        run: |
+            scp ./docker-compose.test.yml ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:/home/${{ secrets.VPS_USERNAME }}/test/
 
      # Шаг 3: Подключение к VPS и запуск Docker Compose
       - name: Deploy Docker Compose on VPS
