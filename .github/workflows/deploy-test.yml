@@ -1,0 +1,37 @@
+name: Deploy
+
+on:
+  repository_dispatch:
+    types:
+      - deploy-test
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+      # Шаг 1: Подключение к VPS
+      - name: Install SSH key
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_PRIVATE_KEY }}
+      
+     # Шаг 3: Подключение к VPS и запуск Docker Compose
+      - name: Deploy Docker Compose on VPS
+        run: |
+            ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} <<EOF
+            cd /home/${{ secrets.VPS_USERNAME }}/test/my-calendar-docker-compose
+            cp ../docker-compose.test.yml .
+            sudo docker compose down || true
+            sudo docker rmi andreyparkh/my-calendar-frontend-pr
+            sudo docker compose up -d
+
+      # Шаг 4: Отправка статуса
+      - name: Send success status
+        if: success()
+        run: echo "Deployment completed successfully."
+
+      - name: Send failure status
+        if: failure()
+        run: echo "Deployment failed."
