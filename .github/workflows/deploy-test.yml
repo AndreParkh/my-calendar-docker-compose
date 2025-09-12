@@ -17,7 +17,7 @@ jobs:
       - name: Set up SSH key
         run: |
             mkdir -p ~/.ssh
-            echo "${{ secrets.VPS_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+            echo ${{ secrets.VPS_PRIVATE_KEY }} > ~/.ssh/id_rsa
             chmod 600 ~/.ssh/id_rsa
             ssh-keyscan -H {{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
       
@@ -34,7 +34,6 @@ jobs:
      # Шаг 3: Подключение к VPS и запуск Docker Compose
       - name: Deploy Docker Compose on VPS
         run: |
-            ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} <<EOF
             ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} <<EOF
             cd /home/${{ secrets.VPS_USERNAME }}/test
             sudo docker compose down || true
