@@ -1,9 +1,36 @@
+networks:
+  dev:
 services:
+  postgres:
+    image: postgres:17
+    container_name: postgres_container-pr
+    env_file:
+      - postgres.env
+    ports:
+      - "5433:5432"
+    networks:
+      dev:
+
+
+  backend:
+    image: andreyparkh/my-calendar-backend:latest
+    container_name: family-hub-backend-pr
+    ports:
+      - "3001:3000"
+    depends_on:
+      - postgres
+    env_file:
+      - backend.env
+    networks:
+      dev:
+
 
   frontend:
     image: andreyparkh/my-calendar-frontend-pr:latest
     container_name: family-hub-frontend-pr
     ports:
-      - "5011:5010"
+      - "8081:8080"
     env_file:
       - frontend.env
+    networks:
+      dev:
