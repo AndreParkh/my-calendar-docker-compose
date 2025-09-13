@@ -28,6 +28,7 @@ jobs:
       - name: Copy docker-compose.test.yml to VPS
         run: |
             scp ./docker-compose.test.yml ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:/home/${{ secrets.VPS_USERNAME }}/test/
+            mv docker-compose.test.yml docker-compose.yml
 
      # Шаг 3: Подключение к VPS и запуск Docker Compose
       - name: Deploy Docker Compose on VPS

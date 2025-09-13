@@ -5,13 +5,13 @@ services:
     env_file:
       - postgres.env
     ports:
-      - "5001:5001"
+      - "5432:5432"
 
   backend:
     image: andreyparkh/my-calendar-backend:latest
     container_name: my-calendar-backend
     ports:
-      - "5002:5002"
+      - "3000:3000"
     depends_on:
       - postgres
     env_file:
@@ -21,7 +21,7 @@ services:
     image: andreyparkh/my-calendar-frontend:latest
     container_name: my-calendar-frontend
     ports:
-      - "5003:5003"
+      - "8080:8080"
     env_file:
       - frontend.env
   nginx:
