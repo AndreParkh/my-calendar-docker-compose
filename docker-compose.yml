@@ -1,5 +1,6 @@
 networks:
   prod:
+  dev:
 
 
 services:
@@ -47,3 +48,6 @@ services:
     depends_on:
       - frontend
       - backend
+    networks:
+      prod:
+      dev:

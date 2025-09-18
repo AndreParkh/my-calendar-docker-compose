@@ -13,7 +13,7 @@ services:
 
 
   backend-pr:
-    image: andreyparkh/my-calendar-backend:latest
+    image: andreyparkh/my-calendar-backend-pr:latest
     container_name: family-hub-backend-pr
     ports:
       - "3001:3000"
