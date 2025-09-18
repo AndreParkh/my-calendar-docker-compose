@@ -37,6 +37,7 @@ jobs:
             cd /home/${{ secrets.VPS_USERNAME }}/test
             sudo docker compose down || true
             sudo docker rmi andreyparkh/my-calendar-frontend-pr
+            sudo docker rmi andreyparkh/my-calendar-backend-pr
             sudo docker compose up -d
 
       # Шаг 4: Отправка статуса

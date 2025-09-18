@@ -1,3 +1,8 @@
+networks:
+  prod:
+  dev:
+
+
 services:
   postgres:
     image: postgres:17
@@ -6,6 +11,9 @@ services:
       - postgres.env
     ports:
       - "5432:5432"
+    networks:
+      prod:
+
 
   backend:
     image: andreyparkh/my-calendar-backend:latest
@@ -16,6 +24,9 @@ services:
       - postgres
     env_file:
       - backend.env
+    networks:
+      prod:
+
 
   frontend:
     image: andreyparkh/my-calendar-frontend:latest
@@ -24,6 +35,10 @@ services:
       - "8080:8080"
     env_file:
       - frontend.env
+    networks:
+      prod:
+
+
   nginx:
     image: nginx:alpine
     ports:
@@ -33,3 +48,6 @@ services:
     depends_on:
       - frontend
       - backend
+    networks:
+      prod:
+      dev:
