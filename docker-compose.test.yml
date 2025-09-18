@@ -1,7 +1,7 @@
 networks:
   dev:
 services:
-  postgres:
+  postgres-pr:
     image: postgres:17
     container_name: postgres_container-pr
     env_file:
@@ -12,7 +12,7 @@ services:
       dev:
 
 
-  backend:
+  backend-pr:
     image: andreyparkh/my-calendar-backend:latest
     container_name: family-hub-backend-pr
     ports:
@@ -25,7 +25,7 @@ services:
       dev:
 
 
-  frontend:
+  frontend-pr:
     image: andreyparkh/my-calendar-frontend-pr:latest
     container_name: family-hub-frontend-pr
     ports:
