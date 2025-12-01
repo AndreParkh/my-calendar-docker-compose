@@ -1,7 +1,7 @@
 networks:
   prod:
   dev:
-
+    external: true
 
 services:
   postgres:
@@ -35,6 +35,8 @@ services:
       - "8080:8080"
     env_file:
       - frontend.env
+    volumes:
+      - ./dist-prod/client:/app/dist/client
     networks:
       prod:
 
@@ -44,10 +46,14 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginxdefault.conf:/etc/nginx/conf.d/default.conf
+      - ./nginxdefault.conf:/etc/nginx/nginx.conf
+      - ./dist-prod/client:/usr/share/nginx/html/prod
+      - ./dist-pr/client:/usr/share/nginx/html/pr
     depends_on:
       - frontend
       - backend
     networks:
       prod:
       dev:
+
+
