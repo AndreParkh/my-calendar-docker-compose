@@ -1,6 +1,6 @@
 networks:
   dev:
-    extrenal: true
+    external: true
 
 services:
   postgres-pr:
