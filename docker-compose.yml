@@ -9,8 +9,6 @@ services:
     container_name: postgres_container
     env_file:
       - postgres.env
-    ports:
-      - "5432:5432"
     networks:
       prod:
 
