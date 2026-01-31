@@ -2,6 +2,10 @@ networks:
   dev:
     external: true
 
+volumes:
+  frontend-assets-dev:
+    external: true
+
 services:
   postgres-pr:
     image: postgres:17
@@ -33,6 +37,6 @@ services:
     env_file:
       - frontend.env
     volumes:
-      - ./dist-pr/client:/app/dist/client
+      - frontend-assets-dev:/app/dist/client/assets/
     networks:
       dev:
