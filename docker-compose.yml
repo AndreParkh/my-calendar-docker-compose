@@ -3,14 +3,17 @@ networks:
   dev:
     external: true
 
+volumes:
+  frontend-assets-prod:
+  frontend-assets-dev:
+    external: true
+
 services:
   postgres:
     image: postgres:17
     container_name: postgres_container
     env_file:
       - postgres.env
-    ports:
-      - "5432:5432"
     networks:
       prod:
 
@@ -36,7 +39,7 @@ services:
     env_file:
       - frontend.env
     volumes:
-      - ./dist-prod/client:/app/dist/client
+      - frontend-assets-prod:/app/dist/client/assets/
     networks:
       prod:
 
@@ -47,8 +50,8 @@ services:
       - "80:80"
     volumes:
       - ./nginxdefault.conf:/etc/nginx/nginx.conf
-      - ./dist-prod/client:/usr/share/nginx/html/prod
-      - ./dist-pr/client:/usr/share/nginx/html/pr
+      - frontend-assets-dev:/usr/share/nginx/dev/assets/
+      - frontend-assets-prod:/usr/share/nginx/prod/assets/
     depends_on:
       - frontend
       - backend

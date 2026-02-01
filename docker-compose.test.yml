@@ -2,20 +2,22 @@ networks:
   dev:
     external: true
 
+volumes:
+  frontend-assets-dev:
+    external: true
+
 services:
   postgres-pr:
     image: postgres:17
     container_name: postgres_container-pr
     env_file:
       - postgres.env
-    ports:
-      - "5433:5432"
     networks:
       dev:
 
 
   backend-pr:
-    image: andreyparkh/my-calendar-backend-pr:latest
+    image: andreyparkh/family-hub-backend-pr:latest
     container_name: family-hub-backend-pr
     ports:
       - "3001:3000"
@@ -35,6 +37,6 @@ services:
     env_file:
       - frontend.env
     volumes:
-      - ./dist-pr/client:/app/dist/client
+      - frontend-assets-dev:/app/dist/client/assets/
     networks:
       dev:
