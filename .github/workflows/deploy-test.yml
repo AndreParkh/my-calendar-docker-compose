@@ -35,7 +35,8 @@ jobs:
         run: |
             ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} <<EOF
             cd /home/${{ secrets.VPS_USERNAME }}/test
-            sudo docker compose down || true
+            sudo docker compose down || true 
+            sudo docker run --rm -v frontend-assets-dev:/static-data alpine sh -c "rm -rf /static-data/*"
             sudo docker rmi andreyparkh/my-calendar-frontend-pr
             sudo docker rmi andreyparkh/family-hub-backend-pr
             sudo docker compose up -d
